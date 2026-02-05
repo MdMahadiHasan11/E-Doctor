@@ -41,7 +41,6 @@ export const loginUser = async (
       headers: { "Content-Type": "application/json" },
     }).then((res) => res.json());
 
-    // Check API response
     if (!res.success) {
       return {
         success: false,
