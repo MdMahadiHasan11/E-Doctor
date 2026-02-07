@@ -1,3 +1,13 @@
-export default function Page() {
-  return <div>{/* Your code here */}</div>;
+export default function PaytientLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+       
+        {children}
+     
+    </>
+  );
 }

@@ -1,16 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { registerPatient } from "@/services/auth/registerPatient";
-import { useActionState } from "react";
+
+import { useActionState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
+import { registerPatient } from "@/services/auth/register-patient";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
   const [state, formAction, isPending] = useActionState(registerPatient, null);
-  console.log(state, "state");
-
+   useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
   const getFieldError = (fieldName: string) => {
     if (state && state.errors) {
       const error = state.errors.find((err: any) => err.field === fieldName);

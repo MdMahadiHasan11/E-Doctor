@@ -1,5 +1,5 @@
-import PublicFooter from "@/components/shared/PublicFooter";
-import PublicNavbar from "@/components/shared/PublicNavbar";
+import PublicFooter from "@/components/shared/public-footer";
+import PublicNavbar from "@/components/shared/public-navbar";
 
 export default function CommonLayout({
   children,
@@ -8,9 +8,13 @@ export default function CommonLayout({
 }) {
   return (
     <>
-      <PublicNavbar />
-      {children}
-      <PublicFooter />
+      <html lang="en" suppressHydrationWarning>
+        <body suppressHydrationWarning>
+          <PublicNavbar />
+          {children}
+          <PublicFooter />
+        </body>
+      </html>
     </>
   );
 }
