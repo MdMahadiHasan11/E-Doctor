@@ -6,6 +6,7 @@ export default function AdminLayout({
   return (
     <>
       <html lang="en" suppressHydrationWarning>
+        <p>layout Admin</p>
         <body suppressHydrationWarning>{children}</body>
       </html>
     </>

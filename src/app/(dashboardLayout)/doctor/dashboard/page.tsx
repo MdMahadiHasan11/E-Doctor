@@ -1,3 +1,7 @@
 export default function Page() {
-  return <div>{/* Your code here */}</div>;
+  return (
+    <div>
+      <p>Dashboard doctor</p>
+    </div>
+  );
 }

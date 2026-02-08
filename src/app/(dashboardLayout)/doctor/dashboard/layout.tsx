@@ -6,6 +6,7 @@ export default function DoctorLayout({
   return (
     <>
       <html lang="en" suppressHydrationWarning>
+        <p>layout Doctor</p>
         <body suppressHydrationWarning>{children}</body>
       </html>
     </>

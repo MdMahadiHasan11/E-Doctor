@@ -5,9 +5,8 @@ export default function PaytientLayout({
 }) {
   return (
     <>
-       
-        {children}
-     
+      <p>layout Patient</p>
+      {children}
     </>
   );
 }
