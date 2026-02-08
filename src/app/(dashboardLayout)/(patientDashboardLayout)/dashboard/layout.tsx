@@ -3,11 +3,5 @@ export default function PaytientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-       
-        {children}
-     
-    </>
-  );
+  return <>{children}</>;
 }
