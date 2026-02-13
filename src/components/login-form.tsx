@@ -10,6 +10,11 @@ import { loginUser } from "@/services/auth/login-user";
 const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [state, formAction, isPending] = useActionState(loginUser, null);
 
+
+  console.log(
+    {redirect}
+  );
+
   useEffect(() => {
     if (state && !state.success && state.message) {
       toast.error(state.message);

@@ -1,13 +1,7 @@
-export default function DoctorLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <body suppressHydrationWarning>{children}</body>
-      </html>
-    </>
-  );
-}
+import React from "react";
+
+const DoctorDashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
+
+export default DoctorDashboardLayout;

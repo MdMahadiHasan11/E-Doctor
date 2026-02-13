@@ -37,6 +37,10 @@ const DoctorViewDetailDialog = ({
   if (!doctor) {
     return null;
   }
+
+  console.log({doctor});
+
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="min-w-5xl max-h-[90vh] flex flex-col p-0">
@@ -46,7 +50,7 @@ const DoctorViewDetailDialog = ({
 
         <div className="flex-1 overflow-y-auto px-6 pb-6">
           {/* Doctor Profile Header */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 bg-to-br from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg mb-6">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg mb-6">
             <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
               <AvatarImage src={doctor?.profilePhoto} alt={doctor?.name} />
               <AvatarFallback className="text-2xl">
@@ -150,15 +154,16 @@ const DoctorViewDetailDialog = ({
                     <div className="flex items-center gap-2 mb-4">
                       <Stethoscope className="h-5 w-5 text-green-600" />
                       <h3 className="font-semibold text-lg">Specialties</h3>
+                      
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {doctor.doctorSpecialties.map((specialty, index) => (
                         <Badge
                           key={index}
-                          variant="outline"
+                          variant="secondary"
                           className="px-4 py-2 text-sm"
                         >
-                          {specialty.specialties?.title || "Unknown"}
+                          {specialty?.specialities?.title|| "Unknown"}
                         </Badge>
                       ))}
                     </div>

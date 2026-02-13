@@ -1,3 +1,5 @@
-export default function Page() {
-  return <div>{/* Your code here */}</div>;
-}
+const DoctorDashboardPage = () => {
+  return <div>DoctorDashboardPage</div>;
+};
+
+export default DoctorDashboardPage;

@@ -1,19 +1,15 @@
 "use client";
-// import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
+import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 import ManagementTable from "@/components/shared/ManagementTable";
-// import { softDeleteDoctor } from "@/services/admin/doctorManagement";
-// import { IDoctor } from "@/types/doctor.interface";
-// import { ISpecialty } from "@/types/specialities.interface";
+import { softDeleteDoctor } from "@/services/admin/doctorManagement";
+import { IDoctor } from "@/types/doctor.interface";
+import { ISpecialty } from "@/types/specialities.interface";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import DoctorFormDialog from "./DoctorFormDialog";
 import { doctorsColumns } from "./doctorsColumns";
 import DoctorViewDetailDialog from "./DoctorViewDetailDialog";
-import { IDoctor } from "@/types/doctor.interface";
-import { ISpecialty } from "@/types/specialities.interface";
-import { softDeleteDoctor } from "@/services/admin/doctorManagement";
-import DeleteConfirmationDialog from "@/components/shared/DeleteConfirmationDialog";
 
 interface DoctorsTableProps {
   doctors: IDoctor[];
@@ -86,6 +82,8 @@ const DoctorsTable = ({ doctors, specialities }: DoctorsTableProps) => {
       />
 
       {/* View Doctor Detail Dialog */}
+
+      
       <DoctorViewDetailDialog
         open={!!viewingDoctor}
         onClose={() => setViewingDoctor(null)}
