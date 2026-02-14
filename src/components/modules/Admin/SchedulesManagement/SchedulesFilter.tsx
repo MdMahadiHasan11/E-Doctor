@@ -5,19 +5,19 @@ import RefreshButton from "@/components/shared/refresh-button";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { Suspense, useEffect, useState, useTransition } from "react";
 
-const SchedulesFilter = () => {
+function SchedulesFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   // Local state for inputs with debouncing - use lazy initialization
   const [startDateInput, setStartDateInput] = useState(
-    () => searchParams.get("startDate") || ""
+    () => searchParams.get("startDate") || "",
   );
   const [endDateInput, setEndDateInput] = useState(
-    () => searchParams.get("endDate") || ""
+    () => searchParams.get("endDate") || "",
   );
 
   // Debounced values
@@ -91,6 +91,12 @@ const SchedulesFilter = () => {
       </div>
     </div>
   );
-};
+}
 
-export default SchedulesFilter;
+export default function SchedulesTable() {
+  return (
+    <Suspense fallback={null}>
+      <SchedulesFilter />
+    </Suspense>
+  );
+}

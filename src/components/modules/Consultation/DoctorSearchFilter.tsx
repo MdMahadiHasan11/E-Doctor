@@ -51,7 +51,7 @@ export default function DoctorSearchFilters({
 
       router.push(`/consultation?${params.toString()}`);
     },
-    [router]
+    [router],
   );
 
   // Trigger search when debounced value changes

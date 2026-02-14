@@ -1,5 +1,6 @@
 import PublicFooter from "@/components/shared/public-footer";
 import PublicNavbar from "@/components/shared/public-navbar";
+import { Suspense } from "react";
 
 export default function CommonLayout({
   children,
@@ -8,13 +9,14 @@ export default function CommonLayout({
 }) {
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
-        <body suppressHydrationWarning>
+      <div>
+        <Suspense fallback={<div>Loading...</div>}>
           <PublicNavbar />
           {children}
           <PublicFooter />
-        </body>
-      </html>
+        </Suspense>
+        {children}
+      </div>
     </>
   );
 }

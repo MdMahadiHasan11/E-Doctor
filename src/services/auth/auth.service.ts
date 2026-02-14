@@ -4,6 +4,7 @@ import {
   isValidRedirectForRole,
   UserRole,
 } from "@/lib/auth-utils";
+import { verifyAccessToken } from "@/lib/jwtHanlders";
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zod-validator";
 import { resetPasswordSchema } from "@/zod/auth.validation";
@@ -11,9 +12,9 @@ import { parse } from "cookie";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { deleteCookie, getCookie, setCookie } from "./token-handlers";
 import { getUserInfo } from "./get-user-info";
-import { verifyAccessToken } from "@/lib/jwtHanlders";
+import { deleteCookie, getCookie, setCookie } from "./token-handlers";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export async function updateMyProfile(formData: FormData) {
   try {

@@ -10,6 +10,7 @@ import {
 import { deleteCookie, getCookie } from "./services/auth/token-handlers";
 import { getUserInfo } from "./services/auth/get-user-info";
 import { getNewAccessToken } from "./services/auth/auth.service";
+export const dynamic = "force-dynamic";
 
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
