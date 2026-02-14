@@ -1,9 +1,8 @@
-
+import { getCookie } from "@/services/auth/token-handlers";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
-import { getCookie } from "@/services/auth/token-handlers";
 import LogoutButton from "./logout-button";
 
 const PublicNavbar = async () => {
@@ -57,7 +56,7 @@ const PublicNavbar = async () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-75 sm:w-100 p-4">
-                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <nav className="flex flex-col space-y-4 mt-8">
                 {navItems.map((link) => (
                   <Link

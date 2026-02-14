@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "sonner";
 import LoginSuccessToast from "@/components/shared/login-success-toast";
 import LogoutSuccessToast from "@/components/shared/logout-success-toast";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
+import { Toaster } from "sonner";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,11 @@ export default function RootLayout({
       >
         <Toaster richColors position="top-center" />
         {children}
-         <LoginSuccessToast />
-        <LogoutSuccessToast />
+        <Suspense fallback={null}>
+          {" "}
+          <LoginSuccessToast />
+          <LogoutSuccessToast />
+        </Suspense>
       </body>
     </html>
   );
