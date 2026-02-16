@@ -123,3 +123,229 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Premium animations */
+@layer components {
+  /* Fade animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale animations */
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Slide animations */
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Glow animation */
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+    }
+  }
+
+  /* Shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  /* Utility classes */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .animate-fade-in-down {
+    animation: fadeInDown 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  /* Shadow utilities */
+  .shadow-soft {
+    @apply shadow-lg shadow-black/10;
+  }
+
+  .shadow-soft-md {
+    @apply shadow-md shadow-black/8;
+  }
+
+  .shadow-premium {
+    @apply shadow-2xl shadow-black/15;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/50;
+  }
+
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  }
+
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Hover scale effect */
+  .hover-scale {
+    @apply hover:scale-105 transition-transform duration-300;
+  }
+
+  /* Focus styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Loading state */
+  .loading {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 100%
+    );
+    background-size: 1000px 100%;
+  }
+
+  /* Disabled state */
+  .disabled-state {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/40 rounded-full hover:bg-primary/60 transition-colors;
+  }
+}
+
+/* Performance optimizations */
+@layer utilities {
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Responsive utilities */
+  @media (max-width: 768px) {
+    .md-hidden {
+      display: none;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .sm-hidden {
+      display: none;
+    }
+  }
+}

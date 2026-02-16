@@ -29,33 +29,45 @@ const ConsultationPage = async ({
   const specialties = specialtiesResponse?.data || [];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Find a Doctor</h1>
-          <p className="text-muted-foreground mt-2">
-            Search and book appointments with our qualified healthcare
-            professionals
-          </p>
+    <div className="relative">
+      {/* Decorative background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
+      
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="space-y-8">
+          {/* Premium Header Section */}
+          <div className="space-y-4 text-center max-w-3xl mx-auto">
+            <h1 className="text-5xl md:text-6xl font-black text-foreground">Find Your Perfect Doctor</h1>
+            <p className="text-lg text-foreground/70 font-medium leading-relaxed">
+              Search and book appointments with our qualified healthcare professionals tailored to your needs
+            </p>
+          </div>
+
+          {/* AI Doctor Suggestion */}
+          <div className="py-4">
+            <AIDoctorSuggestion />
+          </div>
+
+          {/* Filters with enhanced styling */}
+          <div className="rounded-2xl border border-border bg-white/80 backdrop-blur-sm p-8 shadow-lg">
+            <DoctorSearchFilters specialties={specialties} />
+          </div>
+
+          {/* Doctor Grid */}
+          <div>
+            <Suspense fallback={<TableSkeleton columns={3} />}>
+              <DoctorGrid doctors={doctors} />
+            </Suspense>
+          </div>
+
+          {/* Pagination */}
+          <div className="pt-4">
+            <TablePagination
+              currentPage={doctorsResponse?.meta?.page || 1}
+              totalPages={doctorsResponse?.meta?.totalPage || 1}
+            />
+          </div>
         </div>
-
-        {/* AI Doctor Suggestion */}
-        <AIDoctorSuggestion />
-
-        {/* Filters */}
-        <DoctorSearchFilters specialties={specialties} />
-
-        {/* Doctor Grid */}
-        <Suspense fallback={<TableSkeleton columns={3} />}>
-          <DoctorGrid doctors={doctors} />
-        </Suspense>
-
-        {/* Pagination */}
-        <TablePagination
-          currentPage={doctorsResponse?.meta?.page || 1}
-          totalPages={doctorsResponse?.meta?.totalPage || 1}
-        />
       </div>
     </div>
   );
