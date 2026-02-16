@@ -4,16 +4,19 @@ import {
   isValidRedirectForRole,
   UserRole,
 } from "@/lib/auth-utils";
+import { verifyAccessToken } from "@/lib/jwtHanlders";
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zod-validator";
-import { resetPasswordSchema } from "@/zod/auth.validation";
+import {
+  changePasswordSchema,
+  resetPasswordSchema,
+} from "@/zod/auth.validation";
 import { parse } from "cookie";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { deleteCookie, getCookie, setCookie } from "./token-handlers";
 import { getUserInfo } from "./get-user-info";
-import { verifyAccessToken } from "@/lib/jwtHanlders";
+import { deleteCookie, getCookie, setCookie } from "./token-handlers";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export async function updateMyProfile(formData: FormData) {
   try {
@@ -246,6 +249,61 @@ export async function getNewAccessToken() {
       tokenRefreshed: false,
       success: false,
       message: error?.message || "Something went wrong",
+    };
+  }
+}
+
+//change password
+// Reset Password
+export async function changePassword(
+  prevState: any | null,
+  formData: FormData,
+): Promise<any> {
+  const payload = {
+    oldPassword: formData.get("oldPassword") as string,
+    newPassword: formData.get("newPassword") as string,
+    confirmPassword: formData.get("confirmPassword") as string,
+  };
+
+  // 1. Validate
+  const validation = zodValidator(payload, changePasswordSchema);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      message: "Validation failed",
+      errors: validation.errors,
+      formData: payload,
+    };
+  }
+
+  try {
+    const res = await serverFetch.post("/auth/change-password", {
+      body: JSON.stringify({
+        oldPassword: payload.oldPassword,
+        newPassword: payload.newPassword,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const result = await res.json();
+
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message || "Failed to change password",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Password changed successfully",
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      message: err.message || "Something went wrong",
     };
   }
 }
