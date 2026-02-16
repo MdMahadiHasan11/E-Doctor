@@ -52,5 +52,6 @@ const Steps = () => {
       </div>
     </section>
   );
+};
 
 export default Steps;
