@@ -67,47 +67,53 @@ export function Hero({
 
   return (
     <div className="w-full relative">
-      {/* Radial Gradient Background from Bottom */}
+      {/* Gradient Background */}
       <div
-        className="absolute inset-0 z-0 "
+        className="absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(125% 125% at 50% 90%, #fff 30%, #155DFC 100%)",
+            "linear-gradient(135deg, #f8f9fa 0%, #eff0f5 50%, #e8eaf6 100%)",
         }}
       />
       {/* Content Container */}
-      <div className="w-full px-4 py-8 md:px-8 lg:px-16 relative">
+      <div className="w-full px-4 py-16 md:py-24 lg:py-32 relative">
         <div className="mx-auto max-w-[1200px]">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left Column - Hero Content */}
-            <div className="flex flex-col justify-center space-y-6">
+            <div className="flex flex-col justify-center space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-3 self-start rounded-full bg-white px-4 py-2">
+              <div className="inline-flex items-center gap-2 self-start rounded-full bg-primary/10 px-4 py-2 w-fit">
                 <SparkleIcon />
-                <span className="text-[11.9px] font-medium text-blue-700">
+                <span className="text-sm font-semibold text-primary">
                   {badge.text}
                 </span>
               </div>
 
               {/* Heading */}
-              <div className="space-y-2">
-                <h1 className="text-[51px] leading-[60px]">{heading.line1}</h1>
-                <h1 className="text-[51px] leading-[60px]">{heading.line2}</h1>
+              <div className="space-y-3">
+                <h1 className="text-5xl md:text-6xl font-bold leading-tight text-balance text-foreground">
+                  {heading.line1}
+                </h1>
+                <h1 className="text-5xl md:text-6xl font-bold leading-tight text-balance bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  {heading.line2}
+                </h1>
               </div>
 
               {/* Description */}
-              <div className="space-y-1 text-[17px] leading-7 text-gray-600">
+              <div className="space-y-2 max-w-lg">
                 {description.map((line, index) => (
-                  <p key={index}>{line}</p>
+                  <p key={index} className="text-lg leading-relaxed text-muted-foreground">
+                    {line}
+                  </p>
                 ))}
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col gap-4 sm:flex-row">
+              <div className="flex flex-col gap-4 sm:flex-row pt-2">
                 {buttons.primary && (
                   <Button
                     onClick={buttons.primary.onClick}
-                    className="h-[63.622px] gap-3 rounded-xl bg-blue-600 px-8 text-[15.3px] hover:bg-blue-700"
+                    className="h-14 gap-2 rounded-lg px-8 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
                   >
                     <Search className="size-5" />
                     {buttons.primary.text}
@@ -117,7 +123,7 @@ export function Hero({
                   <Button
                     onClick={buttons.secondary.onClick}
                     variant="outline"
-                    className="h-[63.622px] gap-3 rounded-xl border-blue-600 px-8 text-[15.3px] text-blue-600 hover:bg-blue-50"
+                    className="h-14 gap-2 rounded-lg px-8 text-base font-semibold"
                   >
                     <Calendar className="size-5" />
                     {buttons.secondary.text}
@@ -126,14 +132,14 @@ export function Hero({
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 pt-4">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
                 {stats.map((stat, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <p className="text-[25.5px] leading-9">{stat.value}</p>
+                      <p className="text-3xl font-bold text-foreground">{stat.value}</p>
                       {stat.icon}
                     </div>
-                    <p className="text-[13.6px] leading-6 text-gray-600">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {stat.label}
                     </p>
                   </div>
@@ -143,20 +149,20 @@ export function Hero({
 
             {/* Right Column - Form Card */}
             <div className="flex items-center justify-center lg:justify-end">
-              <div className="w-full max-w-[559.929px] rounded-2xl bg-white p-8 shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]">
+              <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl border border-border">
                 {/* Card Header */}
-                <div className="mb-6 flex items-center justify-between">
-                  <h2 className="text-[20.4px] leading-6">{formCard.title}</h2>
+                <div className="mb-8 flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-foreground">{formCard.title}</h2>
                   <LargeSparkleIcon />
                 </div>
 
                 {/* Form */}
                 <form className="space-y-6">
                   {/* Symptoms Input */}
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label
                       htmlFor="symptoms"
-                      className="text-[11.9px] text-gray-700"
+                      className="text-sm font-semibold text-foreground"
                     >
                       {formCard.symptomLabel}
                     </Label>
@@ -164,22 +170,22 @@ export function Hero({
                       id="symptoms"
                       name="symptoms"
                       placeholder={formCard.symptomPlaceholder}
-                      className="h-[49.787px] rounded-xl border-gray-300"
+                      className="h-12 rounded-lg text-base"
                     />
                   </div>
 
                   {/* Submit Button */}
                   <Button
                     type="submit"
-                    className="h-[59.986px] w-full rounded-xl bg-blue-600 text-[15.3px] hover:bg-blue-700"
+                    className="h-12 w-full rounded-lg text-base font-semibold shadow-md hover:shadow-lg transition-all"
                   >
                     {formCard.submitText}
                   </Button>
                 </form>
 
                 {/* Footer */}
-                <div className="mt-6 border-t border-gray-200 pt-4">
-                  <p className="text-center text-[11.9px] leading-5 text-gray-600">
+                <div className="mt-8 border-t border-border pt-6">
+                  <p className="text-center text-xs leading-relaxed text-muted-foreground">
                     {formCard.footerText}
                   </p>
                 </div>

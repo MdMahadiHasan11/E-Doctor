@@ -29,40 +29,39 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="bg-card py-24">
+    <section className="py-20 bg-gradient-to-b from-background via-primary/5 to-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground">What Our Client Says</h2>
-          <p className="text-muted-foreground mt-4">
-            We are committed to providing you with the best medical and healthcare services.
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <h2 className="text-4xl font-bold text-foreground">What Our Patients Say</h2>
+          <p className="text-muted-foreground mt-4 leading-relaxed">
+            We are committed to providing you with the best medical and healthcare services. Hear from our satisfied patients.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <Card key={testimonial.name} className="bg-background relative">
-               <CardContent className="p-8">
-                <Quote className="absolute top-4 left-4 text-primary" size={48} />
-                <div className="relative z-10">
-                  <p className="text-muted-foreground mb-6">{testimonial.quote}</p>
-                  <div className="flex items-center">
-                      <Image 
-                        src={testimonial.image} 
-                        alt={testimonial.name} 
-                        width={64} 
-                        height={64} 
-                        className="rounded-full"
-                      />
-                      <div className="ml-4">
-                          <h4 className="font-bold text-foreground">{testimonial.name}</h4>
-                          <p className="text-muted-foreground text-sm">{testimonial.role}</p>
-                          <div className="flex mt-1">
-                              {[...Array(testimonial.rating)].map((_, i) => (
-                                  <Star key={i} className="text-yellow-400 fill-current" size={16} />
-                              ))}
-                          </div>
-                      </div>
-                  </div>
+            <Card key={testimonial.name} className="border-0 bg-white hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -mr-10 -mt-10" />
+               <CardContent className="p-8 relative z-10">
+                <Quote className="text-primary/20 mb-4" size={32} />
+                <p className="text-foreground leading-relaxed mb-6 font-medium">{testimonial.quote}</p>
+                <div className="flex items-center pt-4 border-t border-border">
+                    <Image 
+                      src={testimonial.image} 
+                      alt={testimonial.name} 
+                      width={56} 
+                      height={56} 
+                      className="rounded-full border-2 border-primary/20"
+                    />
+                    <div className="ml-4">
+                        <h4 className="font-bold text-foreground text-sm">{testimonial.name}</h4>
+                        <p className="text-muted-foreground text-xs mb-2">{testimonial.role}</p>
+                        <div className="flex gap-0.5">
+                            {[...Array(testimonial.rating)].map((_, i) => (
+                                <Star key={i} className="text-accent fill-current" size={14} />
+                            ))}
+                        </div>
+                    </div>
                 </div>
                </CardContent>
             </Card>

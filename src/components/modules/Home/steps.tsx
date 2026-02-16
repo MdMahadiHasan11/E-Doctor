@@ -14,25 +14,17 @@ const steps = [
 ];
 
 const StepCard = ({ icon: Icon, title, description, index }: { icon: React.ElementType, title: string, description: string, index: number }) => {
-    const bgColors = [
-        'bg-blue-50', 'bg-pink-50', 'bg-green-50', 'bg-yellow-50',
-        'bg-pink-50', 'bg-blue-50', 'bg-yellow-50', 'bg-green-50'
-    ];
-    const textColors = [
-        'text-blue-500', 'text-pink-500', 'text-green-500', 'text-yellow-500',
-        'text-pink-500', 'text-blue-500', 'text-yellow-500', 'text-green-500'
-    ];
-
     return (
-        <Card className={`${bgColors[index % 8]}`}>
-            <CardContent className="p-4">
-                 <div className="flex items-center space-x-4">
-                    <div className={`p-3 rounded-full ${textColors[index % 8]} bg-white shadow-sm`}>
-                        <Icon size={24} />
+        <Card className="border-0 bg-white hover:shadow-lg transition-all duration-300 overflow-hidden">
+            <CardContent className="p-6 relative">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-accent" />
+                <div className="flex items-start space-x-4 pl-2">
+                    <div className="p-3 rounded-lg bg-gradient-to-br from-primary/10 to-primary/20 flex-shrink-0">
+                        <Icon className="text-primary" size={24} />
                     </div>
                     <div>
-                        <h3 className="font-bold text-foreground">{title}</h3>
-                        <p className="text-muted-foreground text-sm">{description}</p>
+                        <h3 className="font-bold text-foreground text-base">{title}</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed mt-1">{description}</p>
                     </div>
                 </div>
             </CardContent>
@@ -43,16 +35,16 @@ const StepCard = ({ icon: Icon, title, description, index }: { icon: React.Eleme
 
 const Steps = () => {
   return (
-    <section className="py-24">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground">Easy Steps to Get Your Solution</h2>
-          <p className="text-muted-foreground mt-4">
-            We provide advanced technologies and high-quality surgery facilities right here.
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <h2 className="text-4xl font-bold text-foreground">How It Works</h2>
+          <p className="text-muted-foreground mt-4 leading-relaxed">
+            We provide advanced technologies and high-quality healthcare facilities with a simple and streamlined process.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {steps.map((step, index) => (
                 <StepCard key={index} {...step} index={index} />
             ))}
@@ -60,6 +52,5 @@ const Steps = () => {
       </div>
     </section>
   );
-};
 
 export default Steps;

@@ -31,17 +31,17 @@ const specialists = [
 
 const Specialities = () => {
   return (
-    <section className="py-24 mt-24 md:mt-20">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">
           <div>
-            <h2 className="text-3xl font-bold text-foreground">Our Specialist</h2>
-            <p className="text-muted-foreground max-w-md mt-2">
+            <h2 className="text-4xl font-bold text-foreground">Our Specialties</h2>
+            <p className="text-muted-foreground max-w-md mt-3 leading-relaxed">
               Access to medical experts across all major specialities.
             </p>
           </div>
-          <a href="#" className="text-primary font-semibold hover:underline mt-4 sm:mt-0">
-            View All
+          <a href="#" className="text-primary font-semibold hover:text-primary/80 transition-colors mt-4 sm:mt-0 inline-flex items-center gap-1">
+            View All →
           </a>
         </div>
 
@@ -49,22 +49,18 @@ const Specialities = () => {
           {specialists.map((specialist) => (
             <Card
               key={specialist.name}
-              className={cn(
-                'text-center transition-all duration-300 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:bg-primary hover:text-primary-foreground',
-              )}
+              className="text-center transition-all duration-300 cursor-pointer hover:shadow-lg hover:-translate-y-1 border-0 bg-white"
             >
-              <CardContent className="p-6">
+              <CardContent className="p-8">
                  <div
-                  className={cn(
-                    'w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4',
-                  )}
+                  className="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4 bg-gradient-to-br from-primary/10 to-primary/20"
                 >
                   <specialist.icon
-                    className={cn(specialist.iconColor)}
+                    className="text-primary"
                     size={32}
                   />
                 </div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg font-semibold text-foreground">
                   {specialist.name}
                 </h3>
               </CardContent>
