@@ -4,6 +4,7 @@ import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zod-validator";
 import {
   changePasswordSchema,
+  forgotPasswordSchema,
   resetPasswordSchema,
 } from "@/zod/auth.validation";
 import { parse } from "cookie";
@@ -251,57 +252,107 @@ export async function getNewAccessToken() {
   }
 }
 
-//change password
-// Reset Password
-export async function changePassword(
-  prevState: any | null,
-  formData: FormData,
-): Promise<any> {
-  const payload = {
+export async function forgotPassword(_prevState: any, formData: FormData) {
+  // Build validation payload
+  const validationPayload = {
+    email: formData.get("email") as string,
+  };
+
+  // Validate
+  const validatedPayload = zodValidator(
+    validationPayload,
+    forgotPasswordSchema,
+  );
+
+  if (!validatedPayload.success && validatedPayload.errors) {
+    return {
+      success: false,
+      message: "Validation failed",
+      formData: validationPayload,
+      errors: validatedPayload.errors,
+    };
+  }
+
+  try {
+    // API Call
+    const response = await serverFetch.post("/auth/forgot-password", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: validationPayload.email,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || "Failed to send reset link");
+    }
+
+    return {
+      success: true,
+      message: "Password reset link has been sent to your email!",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error?.message || "Something went wrong",
+      formData: validationPayload,
+    };
+  }
+}
+
+export async function changePassword(_prevState: any, formData: FormData) {
+  // Build validation payload
+  const validationPayload = {
     oldPassword: formData.get("oldPassword") as string,
     newPassword: formData.get("newPassword") as string,
     confirmPassword: formData.get("confirmPassword") as string,
   };
 
-  // 1. Validate
-  const validation = zodValidator(payload, changePasswordSchema);
+  // Validate
+  const validatedPayload = zodValidator(
+    validationPayload,
+    changePasswordSchema,
+  );
 
-  if (!validation.success) {
+  if (!validatedPayload.success && validatedPayload.errors) {
     return {
       success: false,
       message: "Validation failed",
-      errors: validation.errors,
-      formData: payload,
+      formData: validationPayload,
+      errors: validatedPayload.errors,
     };
   }
 
   try {
-    const res = await serverFetch.post("/auth/change-password", {
-      body: JSON.stringify({
-        oldPassword: payload.oldPassword,
-        newPassword: payload.newPassword,
-      }),
+    // API Call
+    const response = await serverFetch.post("/auth/change-password", {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        oldPassword: validationPayload.oldPassword,
+        newPassword: validationPayload.newPassword,
+      }),
     });
-    const result = await res.json();
+
+    const result = await response.json();
 
     if (!result.success) {
-      return {
-        success: false,
-        message: result.message || "Failed to change password",
-      };
+      throw new Error(result.message || "Password change failed");
     }
 
     return {
       success: true,
-      message: "Password changed successfully",
+      message: result.message || "Password changed successfully!",
     };
-  } catch (err: any) {
+  } catch (error: any) {
     return {
       success: false,
-      message: err.message || "Something went wrong",
+      message: error?.message || "Something went wrong",
+      formData: validationPayload,
     };
   }
 }
