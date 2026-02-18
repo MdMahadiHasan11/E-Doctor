@@ -17,7 +17,8 @@ export interface IReview {
 }
 
 export interface IReviewFormData {
-    appointmentId: string;
+appointmentId: string;
+    doctorId?: string;
     rating: number;
     comment: string;
 }
