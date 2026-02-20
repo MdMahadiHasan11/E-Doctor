@@ -20,6 +20,7 @@ export async function createAppointment(data: IAppointmentFormData) {
             revalidateTag('patient-dashboard-meta', { expire: 0 });
             revalidateTag('admin-dashboard-meta', { expire: 0 });
             revalidateTag('doctor-dashboard-meta', { expire: 0 });
+            revalidateTag("doctors-list", "default");
         }
 
         return result;
@@ -51,6 +52,7 @@ export async function createAppointmentWithPayLater(data: IAppointmentFormData) 
             revalidateTag('patient-dashboard-meta', { expire: 0 });
             revalidateTag('admin-dashboard-meta', { expire: 0 });
             revalidateTag('doctor-dashboard-meta', { expire: 0 });
+            revalidateTag("doctors-list", "default");
         }
         return result;
     } catch (error: any) {

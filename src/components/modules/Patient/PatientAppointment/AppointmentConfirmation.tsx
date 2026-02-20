@@ -20,7 +20,6 @@ import {
   Stethoscope,
   User,
 } from "lucide-react";
-import { revalidateTag } from "next/cache";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -40,70 +39,67 @@ const AppointmentConfirmation = ({
   // const [isBooking, setIsBooking] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  // Handle "Pay Now" booking
-const handleConfirmBooking = async () => {
-  setIsPayingNow(true);
+  const handleConfirmBooking = async () => {
+    setIsPayingNow(true);
 
-  try {
-    const result = await createAppointment({
-      doctorId: doctor.id!,
-      scheduleId: schedule.id,
-    });
+    try {
+      const result = await createAppointment({
+        doctorId: doctor.id!,
+        scheduleId: schedule.id,
+      });
 
-    if (result.success && result.data?.paymentUrl) {
-      // Payment required → redirect to Stripe/PayPal
-      toast.success("Redirecting to payment...");
-      window.location.replace(result.data.paymentUrl);
-    } else if (result.success) {
-      // No payment URL → instant booking
-      revalidateTag("doctors-list", "default"); // 🔥 Refresh doctor list cache
-      setBookingSuccess(true);
-      toast.success("Appointment booked successfully!");
+      if (result.success && result.data?.paymentUrl) {
+        toast.success("Redirecting to payment...");
+        // Redirect to Stripe checkout
+        window.location.replace(result.data.paymentUrl);
+      } else if (result.success) {
+        setBookingSuccess(true);
+        toast.success("Appointment booked successfully!");
 
-      setTimeout(() => {
-        router.push("/dashboard/my-appointments");
-      }, 2000);
-    } else {
-      toast.error(result.message || "Failed to book appointment");
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          router.push("/dashboard/my-appointments");
+        }, 2000);
+      } else {
+        toast.error(result.message || "Failed to book appointment");
+        setIsPayingNow(false);
+      }
+    } catch (error) {
+      toast.error("An error occurred while booking the appointment");
       setIsPayingNow(false);
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-    toast.error("An error occurred while booking the appointment");
-    setIsPayingNow(false);
-  }
-};
+  };
 
-// Handle "Pay Later" booking
-const handlePayLater = async () => {
-  setIsPayingLater(true);
+  const handlePayLater = async () => {
+    setIsPayingLater(true);
 
-  try {
-    const result = await createAppointmentWithPayLater({
-      doctorId: doctor.id!,
-      scheduleId: schedule.id,
-    });
+    try {
+      const result = await createAppointmentWithPayLater({
+        doctorId: doctor.id!,
+        scheduleId: schedule.id,
+      });
 
-    if (result.success) {
-      revalidateTag("doctors-list", "default"); // 🔥 Refresh doctor list cache
-      setBookingSuccess(true);
-      toast.success(
-        "Appointment booked! You can pay later from your appointments page."
-      );
+      if (result.success) {
+        setBookingSuccess(true);
+        toast.success(
+          "Appointment booked! You can pay later from your appointments page."
+        );
 
-      setTimeout(() => {
-        router.push("/dashboard/my-appointments");
-      }, 2000);
-    } else {
-      toast.error(result.message || "Failed to book appointment");
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          router.push("/dashboard/my-appointments");
+        }, 2000);
+      } else {
+        toast.error(result.message || "Failed to book appointment");
+        setIsPayingLater(false);
+      }
+    } catch (error) {
+      toast.error("An error occurred while booking the appointment");
       setIsPayingLater(false);
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-    toast.error("An error occurred while booking the appointment");
-    setIsPayingLater(false);
-  }
-};
+  };
 
   if (bookingSuccess) {
     return (
