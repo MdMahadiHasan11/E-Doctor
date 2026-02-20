@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.4",
     "@types/jsonwebtoken": "^9.0.10",
     "badge": "^1.0.3",

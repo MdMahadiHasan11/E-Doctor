@@ -36,7 +36,7 @@ const AppointmentConfirmation = ({
   const router = useRouter();
   const [isPayingNow, setIsPayingNow] = useState(false);
   const [isPayingLater, setIsPayingLater] = useState(false);
-  const [isBooking, setIsBooking] = useState(false);
+  // const [isBooking, setIsBooking] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
   const handleConfirmBooking = async () => {
@@ -316,7 +316,7 @@ const AppointmentConfirmation = ({
             <div className="space-y-3 pt-2">
               <Button
                 onClick={handleConfirmBooking}
-                disabled={isBooking}
+                // disabled={isBooking}
                 className="w-full"
                 size="lg"
               >
@@ -335,7 +335,7 @@ const AppointmentConfirmation = ({
 
               <Button
                 onClick={handlePayLater}
-                disabled={isBooking}
+                // disabled={isBooking}
                 variant="outline"
                 className="w-full"
                 size="lg"
@@ -356,7 +356,7 @@ const AppointmentConfirmation = ({
               <Button
                 variant="ghost"
                 onClick={() => router.back()}
-                disabled={isBooking}
+                // disabled={isBooking}
                 className="w-full"
               >
                 Go Back

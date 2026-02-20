@@ -1,12 +1,12 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { getIconComponent } from "@/lib/icon-mapper";
 import { cn } from "@/lib/utils";
 import { NavSection } from "@/types/dashboard.interface";
 import { UserInfo } from "@/types/user.interface";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
