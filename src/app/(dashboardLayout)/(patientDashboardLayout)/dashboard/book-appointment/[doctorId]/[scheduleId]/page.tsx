@@ -30,6 +30,8 @@ export default async function BookAppointmentPage({
   const doctor: IDoctor = doctorResponse.data;
   const schedule: ISchedule = scheduleResponse.data;
 
+  // console.log({schedule});
+
   return (
     <div className="container mx-auto px-4 py-8">
       <AppointmentConfirmation doctor={doctor} schedule={schedule} />

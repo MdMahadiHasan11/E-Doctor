@@ -3,6 +3,7 @@ import Specialities from "@/components/modules/Home/specialties";
 import Steps from "@/components/modules/Home/steps";
 import Testimonials from "@/components/modules/Home/testimonials";
 import TopRatedDoctors from "@/components/modules/Home/top-rated-doctors";
+// import CTASection from "@/components/modules/Home/cta-section";
 import Head from "next/head";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
         <TopRatedDoctors />
         <Steps />
         <Testimonials />
+        {/* <CTASection /> */}
       </main>
     </>
   );

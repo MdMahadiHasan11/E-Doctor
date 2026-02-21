@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { HeroProps } from "@/types/heroProps";
-import { LargeSparkleIcon, SparkleIcon } from "@/assets/icons/SparkleIcon";
+import { LargeSparkleIcon } from "@/assets/icons/SparkleIcon";
+import Image from "next/image";
 
 
 
 export function Hero({
-  badge = {
-    text: "AI-Powered Healthcare",
-  },
   heading = {
     line1: "Find Your Perfect",
     line2: "Doctor with AI",
@@ -55,59 +53,61 @@ export function Hero({
       "✨ Powered by advanced AI algorithms for accurate doctor matching",
   },
 }: HeroProps) {
-  //   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     const formData = new FormData(e.currentTarget);
-  //     const data = {
-  //       symptoms: formData.get('symptoms') as string,
-  //       specialty: formData.get('specialty') as string,
-  //     };
-  //     formCard.onSubmit?.(data);
-  //   };
-
   return (
-    <div className="w-full relative">
-      {/* Radial Gradient Background from Bottom */}
-      <div
-        className="absolute inset-0 z-0 "
-        style={{
-          background:
-            "radial-gradient(125% 125% at 50% 90%, #fff 30%, #155DFC 100%)",
-        }}
-      />
+    <div className="w-full relative overflow-hidden">
+      {/* Video/Image Background with Overlays */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          fill
+          src="/hero.avif"
+          alt="Medical background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Primary gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-r from-background/95 via-background/85 to-background/60" />
+        {/* Secondary overlay for depth */}
+        <div className="absolute inset-0 bg-linear-to-b from-background/20 via-transparent to-background/50" />
+        {/* Animated gradient accent */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: "radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%)",
+          }}
+        />
+      </div>
       {/* Content Container */}
-      <div className="w-full px-4 py-8 md:px-8 lg:px-16 relative">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+      <div className="w-full px-4 py-12 relative">
+        <div className="mx-auto max-w-300">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left Column - Hero Content */}
-            <div className="flex flex-col justify-center space-y-6">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-3 self-start rounded-full bg-white px-4 py-2">
-                <SparkleIcon />
-                <span className="text-[11.9px] font-medium text-blue-700">
-                  {badge.text}
-                </span>
+            <div className="flex flex-col justify-center space-y-8">
+              
+
+              {/* Heading with premium styling */}
+              <div className="space-y-4">
+                <h1 className="md:text-3xl  font-black leading-tight text-balance text-foreground drop-">
+                  {heading.line1}
+                </h1>
+                <h1 className=" md:text-6xl font-black leading-tight text-balance bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-">
+                  {heading.line2}
+                </h1>
               </div>
 
-              {/* Heading */}
-              <div className="space-y-2">
-                <h1 className="text-[51px] leading-[60px]">{heading.line1}</h1>
-                <h1 className="text-[51px] leading-[60px]">{heading.line2}</h1>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-1 text-[17px] leading-7 text-gray-600">
+              {/* Description with better contrast */}
+              <div className="space-y-2 max-w-lg">
                 {description.map((line, index) => (
-                  <p key={index}>{line}</p>
+                  <p key={index} className="text-lg leading-relaxed text-foreground font-medium">
+                    {line}
+                  </p>
                 ))}
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col gap-4 sm:flex-row">
+              <div className="flex flex-col gap-4 sm:flex-row pt-2">
                 {buttons.primary && (
                   <Button
                     onClick={buttons.primary.onClick}
-                    className="h-[63.622px] gap-3 rounded-xl bg-blue-600 px-8 text-[15.3px] hover:bg-blue-700"
+                    className="h-14 gap-2 rounded-sm px-8 text-base font-semibold  hover:shadow-xl transition-all"
                   >
                     <Search className="size-5" />
                     {buttons.primary.text}
@@ -117,7 +117,7 @@ export function Hero({
                   <Button
                     onClick={buttons.secondary.onClick}
                     variant="outline"
-                    className="h-[63.622px] gap-3 rounded-xl border-blue-600 px-8 text-[15.3px] text-blue-600 hover:bg-blue-50"
+                    className="h-14 gap-2 rounded-sm px-8 text-base font-semibold"
                   >
                     <Calendar className="size-5" />
                     {buttons.secondary.text}
@@ -126,14 +126,14 @@ export function Hero({
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 pt-4">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
                 {stats.map((stat, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <p className="text-[25.5px] leading-9">{stat.value}</p>
+                      <p className="text-3xl font-bold text-foreground">{stat.value}</p>
                       {stat.icon}
                     </div>
-                    <p className="text-[13.6px] leading-6 text-gray-600">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {stat.label}
                     </p>
                   </div>
@@ -143,45 +143,51 @@ export function Hero({
 
             {/* Right Column - Form Card */}
             <div className="flex items-center justify-center lg:justify-end">
-              <div className="w-full max-w-[559.929px] rounded-2xl bg-white p-8 shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]">
-                {/* Card Header */}
-                <div className="mb-6 flex items-center justify-between">
-                  <h2 className="text-[20.4px] leading-6">{formCard.title}</h2>
-                  <LargeSparkleIcon />
-                </div>
-
-                {/* Form */}
-                <form className="space-y-6">
-                  {/* Symptoms Input */}
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="symptoms"
-                      className="text-[11.9px] text-gray-700"
-                    >
-                      {formCard.symptomLabel}
-                    </Label>
-                    <Input
-                      id="symptoms"
-                      name="symptoms"
-                      placeholder={formCard.symptomPlaceholder}
-                      className="h-[49.787px] rounded-xl border-gray-300"
-                    />
+              <div className="w-full max-w-md rounded-sm bg-white/95 backdrop-blur-xl p-10 shadow-2xl border border-white/50 hover:shadow-3xl transition-all duration-300 overflow-hidden relative">
+                {/* Decorative gradient background */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-linear-to-br from-primary/20 to-accent/20 rounded-full -mr-20 -mt-20 blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-linear-to-tr from-primary/10 to-transparent rounded-full -ml-16 -mb-16 blur-3xl" />
+                
+                <div className="relative z-10">
+                  {/* Card Header */}
+                  <div className="mb-8 flex items-center justify-between">
+                    <h2 className="text-3xl font-black text-foreground">{formCard.title}</h2>
+                    <LargeSparkleIcon />
                   </div>
 
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    className="h-[59.986px] w-full rounded-xl bg-blue-600 text-[15.3px] hover:bg-blue-700"
-                  >
-                    {formCard.submitText}
-                  </Button>
-                </form>
+                  {/* Form */}
+                  <form className="space-y-6">
+                    {/* Symptoms Input */}
+                    <div className="space-y-3">
+                      <Label
+                        htmlFor="symptoms"
+                        className="text-sm font-bold text-foreground block"
+                      >
+                        {formCard.symptomLabel}
+                      </Label>
+                      <Input
+                        id="symptoms"
+                        name="symptoms"
+                        placeholder={formCard.symptomPlaceholder}
+                        className="h-14 rounded-sm text-base bg-white/80 border-2 border-primary/20 focus:border-primary focus:bg-white shadow-sm hover:shadow-md transition-all"
+                      />
+                    </div>
 
-                {/* Footer */}
-                <div className="mt-6 border-t border-gray-200 pt-4">
-                  <p className="text-center text-[11.9px] leading-5 text-gray-600">
-                    {formCard.footerText}
-                  </p>
+                    {/* Submit Button */}
+                    <Button
+                      type="submit"
+                      className="h-14 w-full rounded-sm text-base font-bold  hover:shadow-xl transition-all bg-linear-to-r from-primary to-accent hover:opacity-90"
+                    >
+                      {formCard.submitText}
+                    </Button>
+                  </form>
+
+                  {/* Footer */}
+                  <div className="mt-8 border-t border-primary/10 pt-6">
+                    <p className="text-center text-sm leading-relaxed text-foreground/70 font-medium">
+                      {formCard.footerText}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
