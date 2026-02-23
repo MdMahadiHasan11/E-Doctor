@@ -12,10 +12,12 @@ export interface HeroProps {
     primary?: {
       text: string;
       onClick?: () => void;
+      href?: string;
     };
     secondary?: {
       text: string;
       onClick?: () => void;
+      href?: string;
     };
   };
   stats?: Array<{
