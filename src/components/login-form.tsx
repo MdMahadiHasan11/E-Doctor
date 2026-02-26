@@ -1,19 +1,14 @@
 "use client";
+import { loginUser } from "@/services/auth/login-user";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import InputFieldError from "./shared/InputFieldError";
 import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
-import { loginUser } from "@/services/auth/login-user";
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [state, formAction, isPending] = useActionState(loginUser, null);
-
-
-  console.log(
-    {redirect}
-  );
 
   useEffect(() => {
     if (state && !state.success && state.message) {

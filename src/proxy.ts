@@ -135,7 +135,6 @@ export async function proxy(request: NextRequest) {
   }
 
   // Rule 4 : User need password change
-
   if (accessToken) {
     const userInfo = await getUserInfo();
     if (userInfo.needPasswordChange) {
