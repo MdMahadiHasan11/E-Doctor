@@ -1,5 +1,5 @@
 import { getNewAccessToken } from "@/services/auth/auth.service";
-import { deleteCookie, getCookie } from "@/services/auth/token-handlers";
+import {  getCookie } from "@/services/auth/token-handlers";
 
 const BACKEND_API_URL =
   process.env.NEXT_PUBLIC_BASE_API_URL || "http://localhost:5000/api/v1";
@@ -26,15 +26,6 @@ const serverFetchHelper = async (
     },
     ...restOptions,
   });
-
-  // 4️⃣ Professional: Handle 401 Unauthorized globally
-  if (response.status === 401) {
-    // Optional: clear cookies if needed
-    await deleteCookie("accessToken");
-    await deleteCookie("refreshToken");
-    // throw new Error("UNAUTHORIZED_401");
-  }
-
   return response;
 };
 

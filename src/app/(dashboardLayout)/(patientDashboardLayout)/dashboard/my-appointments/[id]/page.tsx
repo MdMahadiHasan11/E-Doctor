@@ -1,4 +1,7 @@
 import AppointmentDetails from "@/components/modules/Patient/PatientAppointment/AppointmentDetails";
+import VideoCall from "@/components/modules/videoCall/VideoCallClient";
+// import VideoCall from "@/components/modules/videoCall/VideoCall";
+// import VideoCall from "@/components/modules/videoCall/VideoCall";
 import { getAppointmentById } from "@/services/patient/appointment.service";
 import { IAppointment } from "@/types/appointments.interface";
 import { notFound } from "next/navigation";
@@ -26,6 +29,7 @@ export default async function AppointmentDetailPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <AppointmentDetails appointment={appointment} />
+      <VideoCall appointmentId={id} />
     </div>
   );
 }
