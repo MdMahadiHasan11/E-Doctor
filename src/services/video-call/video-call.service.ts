@@ -5,10 +5,10 @@ import { serverFetch } from "@/lib/server-fetch";
 export async function getVideoCall(appointmentId: string) {
   try {
     const response = await serverFetch.get(
-      `/video-call/token/zego/${appointmentId}`,
+      `/video-call/token/${appointmentId}`,
     );
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (error: any) {
     console.error("Error fetching appointments:", error);

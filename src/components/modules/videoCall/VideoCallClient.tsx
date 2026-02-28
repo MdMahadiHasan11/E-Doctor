@@ -1,108 +1,70 @@
-// src/components/modules/videoCall/VideoCallClient.tsx
-"use client"; // ← এটা অবশ্যই রাখো, top-এ
+"use client";
 
-import AgoraRTC, {
-  AgoraRTCProvider,
-  useJoin,
-  usePublish,
-} from "agora-rtc-react"; // ← এটা agora-rtc-react থেকে import (sdk-ng bundled)
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
 
-interface VideoCallProps {
-  token: string | null;
-  channelName: string;
-  uid: number | string;
-  appId: string;
-}
+const APP_ID ="465e9790be814e88ab6cc03fbfcd4557";
 
 export default function VideoCallClient({
   token,
   channelName,
   uid,
-  appId,
-}: VideoCallProps) {
-  const [client, setClient] = useState<ReturnType<
-    typeof AgoraRTC.createClient
-  > | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+}: {
+  token: string;
+  channelName: string;
+  uid: number;
+}) {
+  const clientRef = useRef<IAgoraRTCClient | null>(null);
 
-  // Client create + setup শুধু client-side-এ
   useEffect(() => {
-    if (typeof window === "undefined") return; // extra safe (SSR skip)
+    const init = async () => {
+      const client = AgoraRTC.createClient({
+        mode: "rtc",
+        codec: "vp8",
+      });
 
-    setIsMounted(true);
+      clientRef.current = client;
 
-    const newClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-    setClient(newClient);
+      await client.join(APP_ID, channelName, token, uid);
+
+      const [micTrack, camTrack] =
+        await AgoraRTC.createMicrophoneAndCameraTracks();
+
+      await client.publish([micTrack, camTrack]);
+
+      camTrack.play("local-player");
+
+      client.on("user-published", async (user, mediaType) => {
+        await client.subscribe(user, mediaType);
+
+        if (mediaType === "video") {
+          user.videoTrack?.play("remote-player");
+        }
+
+        if (mediaType === "audio") {
+          user.audioTrack?.play();
+        }
+      });
+    };
+
+    init();
 
     return () => {
-      newClient.leave().catch((err) => console.error("Leave error:", err));
+      clientRef.current?.leave();
     };
-  }, []);
+  }, [token, channelName, uid]);
 
-  if (!isMounted || !client) {
-    return (
-      <div
-        style={{
-          height: "100vh",
-          background: "#000",
-          color: "white",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p>ভিডিও কল লোড হচ্ছে... (browser-এ চেক করুন)</p>
+  return (
+    <div style={{ display: "flex", gap: "20px" }}>
+      <div>
+        <h3>Local</h3>
+        <div id="local-player" style={{ width: 400, height: 300 }} />
       </div>
-    );
-  }
 
-  return (
-    <AgoraRTCProvider client={client}>
-      <VideoCallContent
-        token={token}
-        channelName={channelName}
-        uid={uid}
-        appId={appId}
-      />
-    </AgoraRTCProvider>
-  );
-}
-
-// Inner content – hooks এখানে ব্যবহার করো (AgoraRTCProvider-এর ভিতরে)
-function VideoCallContent({ token, channelName, uid, appId }: VideoCallProps) {
-  useJoin(
-    {
-      appid: appId,
-      channel: channelName,
-      token: token ?? undefined,
-      uid,
-    },
-    true, // auto join
-  );
-
-  usePublish(["microphone", "camera"]);
-
-  // পরে যোগ করো:
-  // const localCam = useLocalCameraTrack();
-  // const localMic = useLocalMicrophoneTrack();
-  // const remoteUsers = useRemoteUsers();
-
-  return (
-    <div
-      style={{
-        height: "100vh",
-        background: "#000",
-        color: "white",
-        position: "relative",
-      }}
-    >
-      <p style={{ textAlign: "center", paddingTop: "40vh", fontSize: "24px" }}>
-        ভিডিও কল চলছে... অন্য পার্টি যোগ দিলে দেখা যাবে
-      </p>
-
-      {/* এখানে তোমার full UI যোগ করো */}
-      {/* উদাহরণ: <RemoteUser />, <LocalUser />, controls ইত্যাদি */}
+      <div>
+        <h3>Remote</h3>
+        <div id="remote-player" style={{ width: 400, height: 300 }} />
+      </div>
     </div>
   );
 }
