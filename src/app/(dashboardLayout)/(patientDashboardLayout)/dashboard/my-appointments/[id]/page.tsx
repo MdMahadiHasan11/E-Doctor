@@ -1,7 +1,5 @@
 import AppointmentDetails from "@/components/modules/Patient/PatientAppointment/AppointmentDetails";
-import VideoCall from "@/components/modules/videoCall/VideoCallClient";
-// import VideoCall from "@/components/modules/videoCall/VideoCall";
-// import VideoCall from "@/components/modules/videoCall/VideoCall";
+import VideoCall from "@/components/modules/videoCall/VideoCall";
 import { getAppointmentById } from "@/services/patient/appointment.service";
 import { IAppointment } from "@/types/appointments.interface";
 import { notFound } from "next/navigation";

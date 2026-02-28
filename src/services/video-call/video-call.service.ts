@@ -5,7 +5,7 @@ import { serverFetch } from "@/lib/server-fetch";
 export async function getVideoCall(appointmentId: string) {
   try {
     const response = await serverFetch.get(
-      `/video-call/token/${appointmentId}`,
+      `/video-call/token/zego/${appointmentId}`,
     );
     const result = await response.json();
     console.log(result);
