@@ -47,6 +47,7 @@ const MyProfile = ({ userInfo }: MyProfileProps) => {
 
   const profilePhoto = getProfilePhoto();
   const profileData = getProfileData();
+  console.log({profilePhoto});
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
