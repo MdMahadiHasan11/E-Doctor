@@ -1,4 +1,3 @@
-
 import MySchedulesFilters from "@/components/modules/Doctor/MySchedules/MyScheduleFilters";
 import MySchedulesHeader from "@/components/modules/Doctor/MySchedules/MyScheduleHeader";
 import MySchedulesTable from "@/components/modules/Doctor/MySchedules/MyScheduleTable";
@@ -25,8 +24,11 @@ const DoctorMySchedulesPage = async ({
   const params = await searchParams;
 
   const queryString = queryStringFormatter(params);
-  const myDoctorsScheduleResponse = await getDoctorOwnSchedules(queryString);
-  const availableSchedulesResponse = await getAvailableSchedules();
+  const [myDoctorsScheduleResponse, availableSchedulesResponse] =
+    await Promise.all([
+      getDoctorOwnSchedules(queryString),
+      getAvailableSchedules(),
+    ]);
 
   console.log({
     myDoctorsScheduleResponse,
@@ -40,6 +42,7 @@ const DoctorMySchedulesPage = async ({
   return (
     <div className="space-y-6">
       <MySchedulesHeader
+        meta={availableSchedulesResponse?.meta}
         availableSchedules={availableSchedulesResponse?.data || []}
       />
 

@@ -2,17 +2,22 @@
 "use client";
 
 // import ManagementPageHeader from "@/components/shared/ManagementPageHeader";
+import ManagementPageHeader from "@/components/shared/management-page-header";
+import { TMeta } from "@/types/common.interface";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import BookScheduleDialog from "./BookScheduleDialog";
-import ManagementPageHeader from "@/components/shared/management-page-header";
 
 interface MySchedulesHeaderProps {
   availableSchedules: any[];
+  meta: TMeta;
 }
 
-const MySchedulesHeader = ({ availableSchedules }: MySchedulesHeaderProps) => {
+const MySchedulesHeader = ({
+  availableSchedules,
+  meta,
+}: MySchedulesHeaderProps) => {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -38,7 +43,8 @@ const MySchedulesHeader = ({ availableSchedules }: MySchedulesHeaderProps) => {
         open={isDialogOpen}
         onClose={handleCloseDialog}
         onSuccess={handleSuccess}
-        availableSchedules={availableSchedules}
+        initialSchedules={availableSchedules} // renamed for clarity
+        initialMeta={meta} // pass the meta you already have
       />
 
       <ManagementPageHeader

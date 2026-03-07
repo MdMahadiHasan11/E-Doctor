@@ -12,13 +12,20 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
   createDoctorSchedule,
   getAvailableSchedules,
 } from "@/services/doctor/doctorScedule.services";
 import { ISchedule } from "@/types/schedule.interface";
 import { format } from "date-fns";
-import { Calendar } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Calendar, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -26,49 +33,62 @@ interface BookScheduleDialogProps {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-  availableSchedules: ISchedule[];
+  // We now expect initial data + meta from parent
+  initialSchedules: ISchedule[];
+  initialMeta?: { total: number; page: number; limit: number };
 }
 
 export default function BookScheduleDialog({
   open,
   onClose,
   onSuccess,
-  availableSchedules: initialAvailableSchedules = [],
+  initialSchedules = [],
+  initialMeta,
 }: BookScheduleDialogProps) {
-  const [availableSchedules, setAvailableSchedules] = useState<ISchedule[]>(
-    initialAvailableSchedules
+  const [schedules, setSchedules] = useState<ISchedule[]>(initialSchedules);
+  const [meta, setMeta] = useState(
+    initialMeta || { total: 0, page: 1, limit: 10 },
   );
   const [selectedSchedules, setSelectedSchedules] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingSchedules, setLoadingSchedules] = useState(false);
-  const router = useRouter();
+  const [isFetchingPage, setIsFetchingPage] = useState(false);
+
+  const currentPage = meta.page;
+  const totalPages = Math.ceil(meta.total / meta.limit);
+
+  const loadPage = async (page: number) => {
+    if (page === currentPage) return;
+    setIsFetchingPage(true);
+
+    try {
+      const query = `page=${page}&limit=${meta.limit}`;
+      const response = await getAvailableSchedules(query);
+
+      setSchedules(response?.data || []);
+      setMeta(response?.meta || { total: 0, page, limit: meta.limit });
+      // setSelectedSchedules([]); // optional: clear selection when changing page
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load schedules");
+    } finally {
+      setIsFetchingPage(false);
+    }
+  };
 
   useEffect(() => {
     if (open) {
-      loadAvailableSchedules();
-    } else {
+      // Reset to first page when dialog opens (or keep last page — your choice)
+      setSchedules(initialSchedules);
+      setMeta(initialMeta || { total: 0, page: 1, limit: 10 });
       setSelectedSchedules([]);
     }
-  }, [open]);
-
-  const loadAvailableSchedules = async () => {
-    try {
-      setLoadingSchedules(true);
-      const response = await getAvailableSchedules();
-      setAvailableSchedules(response?.data || []);
-    } catch (error) {
-      console.error("Error loading schedules:", error);
-      toast.error("Failed to load available schedules");
-    } finally {
-      setLoadingSchedules(false);
-    }
-  };
+  }, [open, initialSchedules, initialMeta]);
 
   const handleToggleSchedule = (scheduleId: string) => {
     setSelectedSchedules((prev) =>
       prev.includes(scheduleId)
         ? prev.filter((id) => id !== scheduleId)
-        : [...prev, scheduleId]
+        : [...prev, scheduleId],
     );
   };
 
@@ -78,19 +98,15 @@ export default function BookScheduleDialog({
       return;
     }
 
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       await createDoctorSchedule(selectedSchedules);
       toast.success(
         `Successfully booked ${selectedSchedules.length} schedule${
           selectedSchedules.length > 1 ? "s" : ""
-        }`
+        }`,
       );
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        router.refresh();
-      }
+      onSuccess?.();
       onClose();
     } catch (error) {
       console.error("Error booking schedules:", error);
@@ -103,27 +119,22 @@ export default function BookScheduleDialog({
   const groupSchedulesByDate = () => {
     const grouped: Record<string, ISchedule[]> = {};
 
-    if (availableSchedules.length > 0) {
-      availableSchedules.forEach((schedule) => {
-        const date = format(new Date(schedule.startDateTime), "yyyy-MM-dd");
-        if (!grouped[date]) {
-          grouped[date] = [];
-        }
-        grouped[date].push(schedule);
-      });
-    }
+    schedules.forEach((schedule) => {
+      const date = format(new Date(schedule.startDateTime), "yyyy-MM-dd");
+      if (!grouped[date]) grouped[date] = [];
+      grouped[date].push(schedule);
+    });
 
     return Object.entries(grouped).sort(
-      ([dateA], [dateB]) =>
-        new Date(dateA).getTime() - new Date(dateB).getTime()
+      ([a], [b]) => new Date(a).getTime() - new Date(b).getTime(),
     );
   };
 
-  const groupedSchedules = groupSchedulesByDate();
+  const grouped = groupSchedulesByDate();
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Book Schedules</DialogTitle>
           <DialogDescription>
@@ -131,13 +142,15 @@ export default function BookScheduleDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="py-4">
-          {loadingSchedules ? (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Loading schedules...</p>
+        <div className="py-4 relative">
+          {isFetchingPage && (
+            <div className="absolute inset-0 bg-background/60 flex items-center justify-center z-10">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
-          ) : availableSchedules.length === 0 ? (
-            <div className="text-center py-8">
+          )}
+
+          {schedules.length === 0 ? (
+            <div className="text-center py-12">
               <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
               <p className="text-muted-foreground">
                 No available schedules found
@@ -145,7 +158,7 @@ export default function BookScheduleDialog({
             </div>
           ) : (
             <div className="space-y-6">
-              {groupedSchedules.map(([date, daySchedules]) => (
+              {grouped.map(([date, daySchedules]) => (
                 <div key={date}>
                   <h3 className="font-medium mb-3">
                     {format(new Date(date), "EEEE, MMMM d, yyyy")}
@@ -154,10 +167,18 @@ export default function BookScheduleDialog({
                     {daySchedules.map((schedule) => (
                       <div
                         key={schedule.id}
-                        className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer"
-                        onClick={() => handleToggleSchedule(schedule.id)}
+                        className={`flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer ${
+                          schedule?.isBooked
+                            ? "opacity-50 pointer-events-none"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          !schedule?.isBooked &&
+                          handleToggleSchedule(schedule.id)
+                        }
                       >
                         <Checkbox
+                          disabled={isLoading || schedule?.isBooked}
                           id={schedule.id}
                           checked={selectedSchedules.includes(schedule.id)}
                           onCheckedChange={() =>
@@ -168,7 +189,7 @@ export default function BookScheduleDialog({
                           htmlFor={schedule.id}
                           className="flex-1 cursor-pointer"
                         >
-                          {format(new Date(schedule.startDateTime), "h:mm a")} -{" "}
+                          {format(new Date(schedule.startDateTime), "h:mm a")} –{" "}
                           {format(new Date(schedule.endDateTime), "h:mm a")}
                         </Label>
                       </div>
@@ -179,6 +200,52 @@ export default function BookScheduleDialog({
             </div>
           )}
         </div>
+
+        {/* ─── Pagination ─── */}
+        {totalPages > 1 && (
+          <div className="pt-4 border-t">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) loadPage(currentPage - 1);
+                    }}
+                  />
+                </PaginationItem>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        href="#"
+                        isActive={page === currentPage}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          loadPage(page);
+                        }}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ),
+                )}
+
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) loadPage(currentPage + 1);
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
 
         <DialogFooter>
           <div className="flex items-center justify-between w-full">
