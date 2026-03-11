@@ -17,11 +17,6 @@ const AdminDoctorsManagementPage = async ({
   const queryString = queryStringFormatter(searchParamsObj); // {searchTerm: "John", speciality: "Cardiology" => "?searchTerm=John&speciality=Cardiology"}
   const specialitiesResult = await getSpecialities();
   const doctorsResult = await getDoctors(queryString);
-  const totalPages = Math.ceil(
-    doctorsResult.meta.total / doctorsResult.meta.limit
-  );
-
-  console.log({specialitiesResult});
   return (
     <div className="space-y-6">
       <DoctorsManagementHeader specialities={specialitiesResult.data} />
@@ -44,8 +39,7 @@ const AdminDoctorsManagementPage = async ({
           specialities={specialitiesResult.data}
         />
         <TablePagination
-          currentPage={doctorsResult.meta.page}
-          totalPages={totalPages}
+          meta={ doctorsResult?.meta}
         />
       </Suspense>
     </div>

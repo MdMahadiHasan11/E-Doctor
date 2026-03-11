@@ -32,8 +32,7 @@ const AppointmentsManagementPage = async ({
       </Suspense>
 
       <TablePagination
-        currentPage={response?.meta?.page || 1}
-        totalPages={response?.meta?.totalPage || 1}
+      meta={response?.meta}
       />
     </div>
   );

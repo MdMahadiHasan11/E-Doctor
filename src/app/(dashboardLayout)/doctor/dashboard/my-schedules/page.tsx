@@ -34,9 +34,6 @@ const DoctorMySchedulesPage = async ({
   });
 
   const schedules = myDoctorsScheduleResponse?.data || [];
-  const meta = myDoctorsScheduleResponse?.meta;
-  const totalPages = Math.ceil((meta?.total || 1) / (meta?.limit || 1));
-
   return (
     <div className="space-y-6">
       <MySchedulesHeader
@@ -48,8 +45,7 @@ const DoctorMySchedulesPage = async ({
       <Suspense fallback={<TableSkeleton columns={5} rows={10} />}>
         <MySchedulesTable schedules={schedules} />
         <TablePagination
-          currentPage={meta?.page || 1}
-          totalPages={totalPages || 1}
+          meta={myDoctorsScheduleResponse?.meta}
         />
       </Suspense>
     </div>

@@ -11,16 +11,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { TMeta } from "@/types/common.interface";
 
 interface TablePaginationProps {
-  currentPage: number;
-  totalPages: number;
+  meta: TMeta;
 }
 
-const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
+const TablePagination = ({ meta }: TablePaginationProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
+
+  const totalPages = Math.ceil((meta?.total || 1) / (meta?.limit || 1));
+
+  const currentPage = searchParams.get("page") ? Number(searchParams.get("page")) : 1
 
   const navigateToPage = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());

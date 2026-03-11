@@ -17,10 +17,6 @@ const AdminPatientsManagementPage = async ({
   const queryString = queryStringFormatter(searchParamsObj);
   const patientsResult = await getPatients(queryString);
 
-  const totalPages = Math.ceil(
-    (patientsResult?.meta?.total || 1) / (patientsResult?.meta?.limit || 1)
-  );
-
   return (
     <div className="space-y-6">
       <ManagementPageHeader
@@ -34,8 +30,7 @@ const AdminPatientsManagementPage = async ({
       <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
         <PatientsTable patients={patientsResult?.data || []} />
         <TablePagination
-          currentPage={patientsResult?.meta?.page || 1}
-          totalPages={totalPages || 1}
+          meta={patientsResult?.meta}
         />
       </Suspense>
     </div>

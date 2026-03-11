@@ -6,6 +6,7 @@ import {
   changePasswordSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  setPasswordSchema,
 } from "@/zod/auth.validation";
 import { parse } from "cookie";
 import jwt from "jsonwebtoken";
@@ -347,6 +348,60 @@ export async function changePassword(_prevState: any, formData: FormData) {
     return {
       success: true,
       message: result.message || "Password changed successfully!",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: error?.message || "Something went wrong",
+      formData: validationPayload,
+    };
+  }
+}
+
+export async function setPassword(_prevState: any, formData: FormData) {
+  // Build validation payload
+  const validationPayload = {
+    newPassword: formData.get("newPassword") as string,
+    confirmPassword: formData.get("confirmPassword") as string,
+  };
+
+  // Validate
+  const validatedPayload = zodValidator(
+    validationPayload,
+    setPasswordSchema,
+  );
+
+  if (!validatedPayload.success && validatedPayload.errors) {
+    return {
+      success: false,
+      message: "Validation failed",
+      formData: validationPayload,
+      errors: validatedPayload.errors,
+    };
+  }
+
+  try {
+    // API Call
+    const response = await serverFetch.post("/auth/set-password", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newPassword: validationPayload.newPassword,
+      }),
+    });
+
+    
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || "Password set failed");
+    }
+
+    return {
+      success: true,
+      message: result.message || "Password set successfully!",
     };
   } catch (error: any) {
     return {
