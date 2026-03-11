@@ -9,7 +9,7 @@ import BookScheduleDialog from "./BookScheduleDialog";
 import ManagementPageHeader from "@/components/shared/management-page-header";
 
 interface MySchedulesHeaderProps {
-  availableSchedules: any[];
+  availableSchedules: any;
 }
 
 const MySchedulesHeader = ({ availableSchedules }: MySchedulesHeaderProps) => {
@@ -38,7 +38,8 @@ const MySchedulesHeader = ({ availableSchedules }: MySchedulesHeaderProps) => {
         open={isDialogOpen}
         onClose={handleCloseDialog}
         onSuccess={handleSuccess}
-        availableSchedules={availableSchedules}
+        availableSchedules={availableSchedules?.data || []}
+        meta={availableSchedules?.meta}
       />
 
       <ManagementPageHeader

@@ -105,6 +105,12 @@ export const getDoctorNavItems = async (): Promise<NavSection[]> => {
                     roles: ["DOCTOR"],
                 },
                 {
+                    title: "Add Schedules",
+                    href: "/doctor/dashboard/add-schedules",
+                    icon: "Calendar", // ✅ String
+                    roles: ["DOCTOR"],
+                },
+                {
                     title: "My Schedules",
                     href: "/doctor/dashboard/my-schedules",
                     icon: "Clock", // ✅ String

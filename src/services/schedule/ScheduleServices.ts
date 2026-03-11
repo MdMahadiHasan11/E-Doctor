@@ -41,46 +41,30 @@ export interface ScheduleResponse {
   };
 }
 
-export async function getDoctorSchedules(
-  params: DoctorScheduleParams
-): Promise<ScheduleResponse> {
-  try {
-    const { id, startDate, endDate, page = 1, isBooked = true } = params;
 
-    // Build query string
-    const queryParams = new URLSearchParams({
-      startDate,
-      endDate,
-      page: String(page),
-      isBooked: String(isBooked),
-    });
-
-    const response = await serverFetch.get(
-      `/doctor/schedule/${id}?${queryParams.toString()}`,
-      {
-    cache: "no-store"
-  }
-    );
-
-    const result = await response.json();
-    return result;
-  } catch (error: any) {
-    console.error("[getDoctorSchedules] Error:", error);
-    return {
-      success: false,
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Failed to fetch schedules",
-      data: {
-        meta: {
-          total: 0,
-          page: 1,
-          limit: 10,
-          totalPage: 0,
-        },
-        data: [],
-      },
-    };
-  }
+export async function getDoctorSchedules(queryString?: string) {
+    try {
+        const searchParams = new URLSearchParams(queryString);
+        const page = searchParams.get("page") || "1";
+        const searchTerm = searchParams.get("searchTerm") || "all";
+        const response = await serverFetch.get(`/schedule/doctor${queryString ? `?${queryString}` : ""}`, {
+            next: {
+                tags: [
+                    "schedules-list",
+                    `schedules-page-${page}`,
+                    `schedules-search-${searchTerm}`,
+                ],
+                // Reduced to 120s for more frequent updates on schedules
+                revalidate: 120,
+            },
+        });
+        const result = await response.json();
+        return result;
+    } catch (error: any) {
+        console.log(error);
+        return {
+            success: false,
+            message: `${process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'}`
+        };
+    }
 }

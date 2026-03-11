@@ -5,8 +5,8 @@ import MySchedulesTable from "@/components/modules/Doctor/MySchedules/MySchedule
 import TablePagination from "@/components/shared/TablePagination";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
+import { getSchedules } from "@/services/admin/schedulesManagement";
 import {
-  getAvailableSchedules,
   getDoctorOwnSchedules,
 } from "@/services/doctor/doctorScedule.services";
 import { Suspense } from "react";
@@ -26,19 +26,17 @@ const DoctorMySchedulesPage = async ({
 
   const queryString = queryStringFormatter(params);
   const myDoctorsScheduleResponse = await getDoctorOwnSchedules(queryString);
-  const availableSchedulesResponse = await getAvailableSchedules();
 
-  console.log({
-    myDoctorsScheduleResponse,
-    availableSchedulesResponse,
-  });
+  console.log({params});
 
+  // const availableSchedulesResponse = await getSchedules(queryString);
   const schedules = myDoctorsScheduleResponse?.data || [];
+
   return (
     <div className="space-y-6">
-      <MySchedulesHeader
-        availableSchedules={availableSchedulesResponse?.data || []}
-      />
+      {/* <MySchedulesHeader
+        availableSchedules={availableSchedulesResponse}
+      /> */}
 
       <MySchedulesFilters />
 

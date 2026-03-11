@@ -78,10 +78,6 @@ export async function createSchedule(_prevState: any, formData: FormData) {
     }
 }
 
-/**
- * GET ALL SCHEDULES
- * API: GET /schedule?queryParams
- */
 export async function getSchedules(queryString?: string) {
     try {
         const searchParams = new URLSearchParams(queryString);
@@ -109,10 +105,8 @@ export async function getSchedules(queryString?: string) {
     }
 }
 
-/**
- * GET SCHEDULE BY ID
- * API: GET /schedule/:id
- */
+
+
 export async function getScheduleById(id: string) {
     try {
         const response = await serverFetch.get(`/schedule/${id}`, {
@@ -133,10 +127,6 @@ export async function getScheduleById(id: string) {
     }
 }
 
-/**
- * DELETE SCHEDULE
- * API: DELETE /schedule/:id
- */
 export async function deleteSchedule(id: string) {
     try {
         const response = await serverFetch.delete(`/schedule/${id}`)

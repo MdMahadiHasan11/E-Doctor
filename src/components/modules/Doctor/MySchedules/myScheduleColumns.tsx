@@ -21,7 +21,7 @@ export const myScheduleColumns: Column<IDoctorSchedule>[] = [
           format(new Date(schedule.schedule.startDateTime), "MMM d, yyyy")}
       </span>
     ),
-    sortKey: "schedule.startDateTime",
+    sortKey: "startDateTime",
   },
   {
     header: "Time Slot",
@@ -42,7 +42,7 @@ export const myScheduleColumns: Column<IDoctorSchedule>[] = [
     accessor: (schedule) => {
       const isPast = isPastSchedule(schedule);
       return isPast ? (
-        <Badge variant="secondary">Past</Badge>
+        <Badge variant="destructive">Past</Badge>
       ) : (
         <Badge variant="outline" className="bg-green-50 text-green-700">
           Upcoming

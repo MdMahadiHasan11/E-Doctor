@@ -4,6 +4,7 @@ export interface ISchedule {
     endDateTime: string;
     createdAt: string;
     updatedAt: string;
+    isBooked?: boolean;
 }
 
 export interface IScheduleFormData {
