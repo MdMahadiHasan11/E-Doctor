@@ -27,14 +27,11 @@ const AppointmentsManagementPage = async ({
 
       <AppointmentsFilter />
 
-      <Suspense fallback={<TableSkeleton columns={7} />}>
+      {/* <Suspense fallback={<TableSkeleton columns={7} />}>
         <AppointmentsTable appointments={response?.data || []} />
-      </Suspense>
+      </Suspense> */}
 
-      <TablePagination
-        currentPage={response?.meta?.page || 1}
-        totalPages={response?.meta?.totalPage || 1}
-      />
+      <TablePagination meta={response?.meta} />
     </div>
   );
 };

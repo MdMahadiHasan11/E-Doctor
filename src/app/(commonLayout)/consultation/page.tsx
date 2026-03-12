@@ -52,10 +52,7 @@ const ConsultationPage = async ({
         </Suspense>
 
         {/* Pagination */}
-        <TablePagination
-          currentPage={doctorsResponse?.meta?.page || 1}
-          totalPages={doctorsResponse?.meta?.totalPage || 1}
-        />
+        <TablePagination meta={doctorsResponse?.meta} />
       </div>
     </div>
   );

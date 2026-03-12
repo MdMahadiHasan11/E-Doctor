@@ -18,10 +18,10 @@ const AdminDoctorsManagementPage = async ({
   const specialitiesResult = await getSpecialities();
   const doctorsResult = await getDoctors(queryString);
   const totalPages = Math.ceil(
-    doctorsResult.meta.total / doctorsResult.meta.limit
+    doctorsResult.meta.total / doctorsResult.meta.limit,
   );
 
-  console.log({specialitiesResult});
+  console.log({ specialitiesResult });
   return (
     <div className="space-y-6">
       <DoctorsManagementHeader specialities={specialitiesResult.data} />
@@ -43,10 +43,7 @@ const AdminDoctorsManagementPage = async ({
           doctors={doctorsResult.data}
           specialities={specialitiesResult.data}
         />
-        <TablePagination
-          currentPage={doctorsResult.meta.page}
-          totalPages={totalPages}
-        />
+        <TablePagination meta={doctorsResult.meta} />
       </Suspense>
     </div>
   );

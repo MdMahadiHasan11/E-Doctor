@@ -6,26 +6,29 @@ import { revalidateTag } from "next/cache";
 export async function getDoctorOwnSchedules(queryString?: string) {
   try {
     // const response = await serverFetch.get(`/doctor-schedule/my-schedule${queryString ? `?${queryString}` : ""}`);
+
+    const searchParams = new URLSearchParams(queryString);
+    const page = searchParams.get("page") || "1";
+
     const response = await serverFetch.get(
       `/doctor-schedule${queryString ? `?${queryString}` : ""}`,
       {
         next: {
-          tags: ["my-schedules", "doctor-schedules-list"],
+          tags: [
+            "my-schedules",
+            "doctor-schedules-list",
+            // `schedules-page-${page}`,
+          ],
           revalidate: 180, // 3 minutes
         },
       },
     );
     const result = await response.json();
-    return {
-      success: result.success,
-      data: Array.isArray(result.data) ? result.data : [],
-      meta: result.meta,
-    };
+    return result;
   } catch (error: any) {
     console.log(error);
     return {
       success: false,
-      data: [],
       message: `${process.env.NODE_ENV === "development" ? error.message : "Something went wrong"}`,
     };
   }

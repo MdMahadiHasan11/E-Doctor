@@ -1,5 +1,6 @@
 "use client";
 
+import { TMeta } from "@/types/common.interface";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
@@ -13,14 +14,18 @@ import {
 } from "../ui/select";
 
 interface TablePaginationProps {
-  currentPage: number;
-  totalPages: number;
+  meta: TMeta;
 }
 
-const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
+const TablePagination = ({ meta }: TablePaginationProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
+
+  const currentPage = meta?.page || 1;
+  const limit = meta?.limit || 10;
+  const total = meta?.total || 1;
+  const totalPages = Math.ceil(total / limit);
 
   const navigateToPage = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());

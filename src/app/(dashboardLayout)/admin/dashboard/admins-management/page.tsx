@@ -17,7 +17,7 @@ const AdminAdminsManagementPage = async ({
   const adminsResult = await getAdmins(queryString);
 
   const totalPages = Math.ceil(
-    (adminsResult?.meta?.total || 1) / (adminsResult?.meta?.limit || 1)
+    (adminsResult?.meta?.total || 1) / (adminsResult?.meta?.limit || 1),
   );
 
   return (
@@ -29,10 +29,7 @@ const AdminAdminsManagementPage = async ({
 
       <Suspense fallback={<TableSkeleton columns={8} rows={10} />}>
         <AdminsTable admins={adminsResult?.data || []} />
-        <TablePagination
-          currentPage={adminsResult?.meta?.page || 1}
-          totalPages={totalPages || 1}
-        />
+        <TablePagination meta={adminsResult?.meta} />
       </Suspense>
     </div>
   );

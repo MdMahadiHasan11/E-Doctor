@@ -13,47 +13,47 @@ interface AppointmentsTableProps {
 }
 
 const AppointmentsTable = ({ appointments }: AppointmentsTableProps) => {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
-  const [viewingAppointment, setViewingAppointment] =
-    useState<IAppointment | null>(null);
-  const [changingStatusAppointment, setChangingStatusAppointment] =
-    useState<IAppointment | null>(null);
+  // const router = useRouter();
+  // const [, startTransition] = useTransition();
+  // const [viewingAppointment, setViewingAppointment] =
+  //   useState<IAppointment | null>(null);
+  // const [changingStatusAppointment, setChangingStatusAppointment] =
+  //   useState<IAppointment | null>(null);
 
-  const handleRefresh = () => {
-    startTransition(() => {
-      router.refresh();
-    });
-  };
+  // const handleRefresh = () => {
+  //   startTransition(() => {
+  //     router.refresh();
+  //   });
+  // };
 
-  const handleView = (appointment: IAppointment) => {
-    setViewingAppointment(appointment);
-  };
+  // const handleView = (appointment: IAppointment) => {
+  //   setViewingAppointment(appointment);
+  // };
 
-  const handleEdit = (appointment: IAppointment) => {
-    setChangingStatusAppointment(appointment);
-  };
+  // const handleEdit = (appointment: IAppointment) => {
+  //   setChangingStatusAppointment(appointment);
+  // };
 
   return (
     <>
       <ManagementTable
         data={appointments}
         columns={appointmentsColumns}
-        onView={handleView}
-        onEdit={handleEdit}
+        // onView={handleView}
+        // onEdit={handleEdit}
         getRowKey={(appointment) => appointment.id!}
         emptyMessage="No appointments found"
       />
 
       {/* View Appointment Detail Dialog */}
-      <AppointmentViewDetailDialog
+      {/* <AppointmentViewDetailDialog
         open={!!viewingAppointment}
         onClose={() => setViewingAppointment(null)}
         appointment={viewingAppointment}
-      />
+      /> */}
 
       {/* Change Status Dialog */}
-      <ChangeAppointmentStatusDialog
+      {/* <ChangeAppointmentStatusDialog
         open={!!changingStatusAppointment}
         onClose={() => setChangingStatusAppointment(null)}
         appointment={changingStatusAppointment}
@@ -61,7 +61,7 @@ const AppointmentsTable = ({ appointments }: AppointmentsTableProps) => {
           setChangingStatusAppointment(null);
           handleRefresh();
         }}
-      />
+      /> */}
     </>
   );
 };

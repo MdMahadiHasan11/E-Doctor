@@ -30,14 +30,7 @@ const DoctorMySchedulesPage = async ({
       getAvailableSchedules(),
     ]);
 
-  console.log({
-    myDoctorsScheduleResponse,
-    availableSchedulesResponse,
-  });
-
   const schedules = myDoctorsScheduleResponse?.data || [];
-  const meta = myDoctorsScheduleResponse?.meta;
-  const totalPages = Math.ceil((meta?.total || 1) / (meta?.limit || 1));
 
   return (
     <div className="space-y-6">
@@ -49,12 +42,9 @@ const DoctorMySchedulesPage = async ({
       <MySchedulesFilters />
 
       <Suspense fallback={<TableSkeleton columns={5} rows={10} />}>
-        <MySchedulesTable schedules={schedules} />
-        <TablePagination
-          currentPage={meta?.page || 1}
-          totalPages={totalPages || 1}
-        />
+        <MySchedulesTable schedules={schedules || []} />
       </Suspense>
+      <TablePagination meta={myDoctorsScheduleResponse?.meta} />
     </div>
   );
 };
