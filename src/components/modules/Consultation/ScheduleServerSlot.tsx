@@ -1,6 +1,5 @@
 // import { getDoctorSchedules, ScheduleResponse } from "@/services/doctor/scheduleService";
-import { getDoctorSchedules, ScheduleResponse } from "@/services/schedule/ScheduleServices";
-import { format } from "date-fns";
+import { getDoctorSchedules } from "@/services/schedule/ScheduleServices";
 import { Calendar } from "lucide-react";
 import ScheduleSlotsList from "./ScheduleSlotList";
 
@@ -18,14 +17,8 @@ export default async function ScheduleSlotsServer({
   endDate,
   page = 1,
 }: ScheduleSlotsServerProps) {
-
-  const scheduleData = await getDoctorSchedules({
-    id: doctorId,
-    startDate,
-    endDate,
-    page,
-    isBooked: false,
-  });
+  const scheduleData = await getDoctorSchedules();
+  console.log({ startDate, endDate });
 
   const slots = scheduleData?.data?.data ?? [];
   const meta = scheduleData?.data?.meta ?? {
@@ -38,9 +31,7 @@ export default async function ScheduleSlotsServer({
     return (
       <div className="text-center py-10">
         <Calendar className="mx-auto h-10 w-10 text-muted-foreground" />
-        <p className="text-sm mt-2 text-muted-foreground">
-          No available slots
-        </p>
+        <p className="text-sm mt-2 text-muted-foreground">No available slots</p>
       </div>
     );
   }
@@ -48,12 +39,12 @@ export default async function ScheduleSlotsServer({
   return (
     <div>
       <p>Hello</p>
-      {/* <ScheduleSlotsList
-      slots={slots}
-      meta={meta}
-      doctorId={doctorId}
-      page={page}
-    /> */}
+      <ScheduleSlotsList
+        slots={slots}
+        meta={meta}
+        doctorId={doctorId}
+        page={page}
+      />
     </div>
   );
 }
