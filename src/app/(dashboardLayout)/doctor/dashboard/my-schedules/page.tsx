@@ -1,11 +1,12 @@
 
 import MySchedulesFilters from "@/components/modules/Doctor/MySchedules/MyScheduleFilters";
-import MySchedulesHeader from "@/components/modules/Doctor/MySchedules/MyScheduleHeader";
+// import MySchedulesHeader from "@/components/modules/Doctor/MySchedules/MyScheduleHeader";
 import MySchedulesTable from "@/components/modules/Doctor/MySchedules/MyScheduleTable";
 import TablePagination from "@/components/shared/TablePagination";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { queryStringFormatter } from "@/lib/formatters";
-import { getSchedules } from "@/services/admin/schedulesManagement";
+// import { queryStringFormatter } from "@/lib/formatters";
+// import { getSchedules } from "@/services/admin/schedulesManagement";
 import {
   getDoctorOwnSchedules,
 } from "@/services/doctor/doctorScedule.services";
@@ -27,21 +28,23 @@ const DoctorMySchedulesPage = async ({
   const queryString = queryStringFormatter(params);
   const myDoctorsScheduleResponse = await getDoctorOwnSchedules(queryString);
 
-  console.log({params});
-
-  // const availableSchedulesResponse = await getSchedules(queryString);
-  const schedules = myDoctorsScheduleResponse?.data || [];
 
   return (
     <div className="space-y-6">
       {/* <MySchedulesHeader
         availableSchedules={availableSchedulesResponse}
       /> */}
+       <div>
+        <h1 className="text-3xl font-bold tracking-tight">My Schedules</h1>
+        <p className="text-muted-foreground mt-2">
+          Manage your patient schedule and prescriptions
+        </p>
+      </div>
 
       <MySchedulesFilters />
 
       <Suspense fallback={<TableSkeleton columns={5} rows={10} />}>
-        <MySchedulesTable schedules={schedules} />
+        <MySchedulesTable schedules={myDoctorsScheduleResponse?.data} />
         <TablePagination
           meta={myDoctorsScheduleResponse?.meta}
         />

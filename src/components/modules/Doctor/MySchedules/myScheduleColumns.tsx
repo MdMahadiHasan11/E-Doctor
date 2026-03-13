@@ -3,44 +3,51 @@
 import { Column } from "@/components/shared/ManagementTable";
 import { Badge } from "@/components/ui/badge";
 import { IDoctorSchedule } from "@/types/schedule.interface";
-import { format, isBefore, startOfDay } from "date-fns";
+import { format, isBefore } from "date-fns";
 
 const isPastSchedule = (schedule: IDoctorSchedule) => {
-  return isBefore(
-    new Date(schedule.schedule?.startDateTime || ""),
-    startOfDay(new Date())
-  );
+  const startTime = schedule?.schedule?.startDateTime;
+
+  if (!startTime) return false;
+
+  return isBefore(new Date(startTime), new Date());
 };
 
 export const myScheduleColumns: Column<IDoctorSchedule>[] = [
   {
     header: "Date",
-    accessor: (schedule) => (
-      <span className="font-medium">
-        {schedule.schedule?.startDateTime &&
-          format(new Date(schedule.schedule.startDateTime), "MMM d, yyyy")}
-      </span>
-    ),
+    accessor: (schedule) => {
+      const startTime = schedule?.schedule?.startDateTime;
+
+      return (
+        <span className="font-medium">
+          {startTime && format(new Date(startTime), "MMM d, yyyy")}
+        </span>
+      );
+    },
     sortKey: "startDateTime",
   },
+
   {
     header: "Time Slot",
-    accessor: (schedule) => (
-      <div className="flex items-center gap-2">
+    accessor: (schedule) => {
+      const start = schedule?.schedule?.startDateTime;
+      const end = schedule?.schedule?.endDateTime;
+
+      return (
         <span className="text-sm">
-          {schedule.schedule?.startDateTime &&
-            format(new Date(schedule.schedule.startDateTime), "h:mm a")}{" "}
-          -{" "}
-          {schedule.schedule?.endDateTime &&
-            format(new Date(schedule.schedule.endDateTime), "h:mm a")}
+          {start && format(new Date(start), "h:mm a")} -{" "}
+          {end && format(new Date(end), "h:mm a")}
         </span>
-      </div>
-    ),
+      );
+    },
   },
+
   {
     header: "Status",
     accessor: (schedule) => {
       const isPast = isPastSchedule(schedule);
+
       return isPast ? (
         <Badge variant="destructive">Past</Badge>
       ) : (
@@ -50,13 +57,12 @@ export const myScheduleColumns: Column<IDoctorSchedule>[] = [
       );
     },
   },
+
   {
     header: "Booking Status",
     accessor: (schedule) =>
       schedule.isBooked ? (
-        <Badge variant="default" className="bg-blue-600">
-          Booked
-        </Badge>
+        <Badge className="bg-blue-600">Booked</Badge>
       ) : (
         <Badge variant="outline">Available</Badge>
       ),

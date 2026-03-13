@@ -22,6 +22,7 @@ const DoctorAddSchedulesPage = async ({
   const params = await searchParams;
   const queryString = queryStringFormatter(params);
   const availableSchedulesResponse = await getDoctorSchedules(queryString);
+  console.log({queryString},"ooooooooooooooooo");
   return (
     <div className="space-y-6">
       <AddScheduleHeader />

@@ -66,6 +66,10 @@ export default function DoctorAppointmentsTable({
         columns={doctorAppointmentColumns}
         onView={handleView}
         onEdit={handleEditClick}
+        canEdit={(appointment)=>
+          appointment.status === AppointmentStatus.SCHEDULED ||
+          appointment.status === AppointmentStatus.INPROGRESS
+        }
         getRowKey={(appointment) => appointment.id}
         emptyMessage="No appointments found"
       />
